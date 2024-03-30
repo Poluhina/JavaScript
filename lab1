@@ -1,0 +1,164 @@
+const transactions = require('./transactions.json');
+
+class TransactionAnalyzer {
+
+getUniqueTransactionType() {
+    const uniqueType = new Set();
+    this.transactions.forEach((transaction) => {
+        uniqueType.add(transaction.transaction_typr);
+    });
+    return [...uniqueType];
+    }
+}
+  
+calculateTotalAmount() 
+    return this.transactions.reduce((totalAmount, transaction) => {
+        return totalAmount + transaction.transaction_amount;
+    }, 0);
+
+
+calculateTotalAmountByDate(year, month, day) 
+    let filtered = this.transactions;
+    if (year) {
+        filtered = filtered.filter(transaction => {
+            const transactionYear = Number(transaction.transaction_date.split('-')[0]);
+            return transactionYear === year;
+        });
+    }
+    if (month) {
+        filtered = filtered.filter(transaction => {
+            const transactionMonth = Number(transaction.transaction_date.split('-')[1]);
+            return transactionMonth === month; 
+    });
+}
+    if (day) {
+        filtered = filtered.filter(transaction => {
+            const transactionDay = Number(transaction.transaction_date.split('-')[2]);
+            return transactionDay === day; 
+    });
+}
+
+const totalAmount = filtered.reduce((acc, transaction) => {
+    return acc + parseFloat(transaction.transaction_amount);
+}, 0);
+return totalAmount;
+getTransactionByType(type) 
+    return this.transactions.filter((item) => {
+        return item.transaction_type === type;
+    });
+
+
+getTransactionsInDateRange(startDate, endDate) 
+    return this.transactions.filter((item) => {
+        return item.transaction_date >= startDate && item.transaction_date <= endDate;
+    });
+
+
+getTransactionsByMerchant(merchantName) 
+    return this.transactions.filter((item) => {
+        return item.merchant_name === merchantName;
+    });
+
+
+calculateAverageTransactionAmount() 
+    return this.transactions.reduse((totalAmount, transaction) => {
+        return totalAmount + parseFloat(transaction.transaction_amount);
+    }, 0) / this.transactions.length;
+
+getTransactionsByAmountRange(minAmount, maxAmount) 
+    return this.transactions.filter((element) => {
+        return element.transaction_amount >= minAmount && element.transaction_amount <= maxAmount;
+    });
+
+findMostTransactionsMonth() 
+    let mostTransactionsMonth = null;
+    let maxTr = 0;
+
+    const transactionsByMonth = this.transactions.reduce((acc, item) => {
+        const month = entry.transaction_date.split('-')[1];
+        acc[month] = (acc[month] || 0) + 1;
+        if (acc[month] > maxTr) {
+            maxTr = acc[month];
+            mostTransactionsMonth = month;
+        }
+        return acc;
+    }, {});
+
+    return mostTransactionsMonth;
+calculateTotalDebitAmount() 
+ return this.transactions.filter((item) => {
+      return item.transaction_type === "debit";
+  }).reduce((acc, item) => {
+       return acc + parseFloat(item.transaction_amount);
+ }, 0);
+    
+findMostDebitTransactionMonth() 
+   let DebitMonth = null;
+   let maxDebitTr = 0;
+
+   for (const month in this.transactions.reduce((acc, transaction) => {
+       if (transaction.transaction_type === 'debit') {
+           const month = transaction.transaction_date.split('-')[1];
+         acc[month] = (acc[month] || 0) + 1;
+         if (acc[month] > maxDebitTr) {
+             maxDebitTr = acc[month];
+              DebitMonth = month;
+            }
+        }
+      return acc;
+    }, {}));
+
+    return DebitMonth;
+
+mostTransactionTypes()
+    const debitAmount = this.transactions.filter((item) => {
+        return item.transaction_type === "debit";
+    }).lenght;
+    const creditAmount = this.transactions.filter((item) => {
+        return item.transaction_type === "credit";
+    }).lenght;
+
+    if (debitAmount < creditAmount) {
+        return "credit";
+    }
+    else if (debitAmount > creditAmount) {
+        return "debit";
+    }
+    else {
+        return "equal";
+    }
+getTransactionsBeforeDate(date) 
+    return this.transactions.filter((item) => {
+         return item.transaction_date < date;
+    });
+    
+    
+findTransactionById(id) 
+    return this.transactions.find((item) => {
+        return item.transaction_id === id;
+    });
+    
+    
+mapTransactionDescriptions() 
+    return this.transactions.map((item) => {
+        return item.transaction_description;
+    });
+
+const transactionAnalyzer = new TransactionAnalyzer(transactions);
+console.log(transactionAnalyzer.addTransaction("new transaction to add"));
+console.log(transactionAnalyzer.getAllTransactions());
+console.log(transactionAnalyzer.getUniqueTransactionType());
+console.log(transactionAnalyzer.calculateTotalAmount());
+console.log(transactionAnalyzer.calculateTotalAmountByDate(2019, 1, 2));
+console.log(transactionAnalyzer.getTransactionByType("debit"));
+console.log(transactionAnalyzer.getTransactionsInDateRange("2019-03-01", "2019-04-01"));
+console.log(transactionAnalyzer.getTransactionsByMerchant("BurgerJointXYZ"));
+console.log(transactionAnalyzer.calculateAverageTransactionAmount());
+console.log(transactionAnalyzer.getTransactionsByAmountRange(50, 100));
+console.log(transactionAnalyzer.calculateTotalDebitAmount());
+console.log(transactionAnalyzer.findMostTransactionsMonth());
+console.log(transactionAnalyzer.findMostDebitTransactionMonth());
+console.log(transactionAnalyzer.mostTransactionTypes());
+console.log(transactionAnalyzer.getTransactionsBeforeDate("2019-03-10"));
+console.log(transactionAnalyzer.findTransactionById("112"));
+console.log(transactionAnalyzer.mapTransactionDescriptions());
