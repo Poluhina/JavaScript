@@ -1,6 +1,9 @@
 const transactions = require('./transactions.json');
 
 class TransactionAnalyzer {
+  constructor(transactions) {
+  this.transactions = transactions;
+};
 
 getUniqueTransactionType() {
     const uniqueType = new Set();
