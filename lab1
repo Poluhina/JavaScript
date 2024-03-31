@@ -1,10 +1,21 @@
 const transactions = require('./transactions.json');
 
+/**
+  * Класс для анализа транзакций
+  */
 class TransactionAnalyzer {
-  constructor(transactions) {
-  this.transactions = transactions;
-};
+    /**
+     * Создает экземпляр TransactionAnalyzer
+     * @param {Array} transactions массив транзакций для анализа 
+     */
+ constructor(transactions) {
+    this.transactions = transactions;
+ }
 
+ /**
+  * Возвращает уникальные типы транзакций
+  * @returns {Array} массив уникальных типов транзакций
+  */
 getUniqueTransactionType() {
     const uniqueType = new Set();
     this.transactions.forEach((transaction) => {
@@ -13,13 +24,23 @@ getUniqueTransactionType() {
     return [...uniqueType];
     }
 }
-  
+
+/**
+ * Вычисляет общую сумму транзакций
+ * @returns {number} общая суммма транзакций
+ */
 calculateTotalAmount() 
     return this.transactions.reduce((totalAmount, transaction) => {
         return totalAmount + transaction.transaction_amount;
     }, 0);
 
-
+/**
+ * Вычисляет общую сумму транзакций по дате
+ * @param {number} year (год)
+ * @param {number} month (месяц)
+ * @param {number} day (день)
+ * @returns {number} общая сумма транзакций по уникальнной дате
+ */
 calculateTotalAmountByDate(year, month, day) 
     let filtered = this.transactions;
     if (year) {
@@ -45,34 +66,71 @@ const totalAmount = filtered.reduce((acc, transaction) => {
     return acc + parseFloat(transaction.transaction_amount);
 }, 0);
 return totalAmount;
+/**
+ * Возвращает транзакции по уникальному типу
+ * @param {string} тип транзакций
+ * @returns {Array} массив транзакций уникального типа
+ */
 getTransactionByType(type) 
     return this.transactions.filter((item) => {
         return item.transaction_type === type;
     });
 
-
+/**
+ * Возвращает транзакции в заданном диапозоне дат
+ * @param {string} изначальная дата
+ * @param {string} конечная дата
+ * @returns {Array} массив транзакций в заданном диапозоне дат
+ */
 getTransactionsInDateRange(startDate, endDate) 
     return this.transactions.filter((item) => {
         return item.transaction_date >= startDate && item.transaction_date <= endDate;
     });
 
-
+/**
+ * Возвращает транзакции по указанному имени торговца
+ * @param {string} имя торговца
+ * @returns {Array} массив транзакций указанного торговца
+ */
 getTransactionsByMerchant(merchantName) 
     return this.transactions.filter((item) => {
         return item.merchant_name === merchantName;
     });
 
-
+/**
+ * Вычисляет среднюю сумму транзакций
+ * @returns {number} средняя сумма транзакции
+ */
 calculateAverageTransactionAmount() 
-    return this.transactions.reduse((totalAmount, transaction) => {
+    return this.transactions.reduce((totalAmount, transaction) => {
         return totalAmount + parseFloat(transaction.transaction_amount);
     }, 0) / this.transactions.length;
 
+/**
+ * Возвращает транзакции в задданом диапозоне сумм
+ * @param {number} минимальная сумма
+ * @param {number} максимальная сумма
+ * @returns {Array} массив транзакций в заданном диапозоне сумм
+ */
 getTransactionsByAmountRange(minAmount, maxAmount) 
     return this.transactions.filter((element) => {
         return element.transaction_amount >= minAmount && element.transaction_amount <= maxAmount;
     });
 
+/**
+ * Вычисляет общую сумму дебитовых транзакций
+ * @returns {number} общая сумма дебитовых транзакций
+ */
+calculateTotalDebitAmount() 
+    return this.transactions.filter((item) => {
+         return item.transaction_type === "debit";
+     }).reduce((acc, item) => {
+          return acc + parseFloat(item.transaction_amount);
+    }, 0);
+/**
+ * Находит месяц с наибольшим количеством транзакций
+ * @returns {string} месяц с наибольшим количеством транзакций
+ */
 findMostTransactionsMonth() 
     let mostTransactionsMonth = null;
     let maxTr = 0;
@@ -88,13 +146,11 @@ findMostTransactionsMonth()
     }, {});
 
     return mostTransactionsMonth;
-calculateTotalDebitAmount() 
- return this.transactions.filter((item) => {
-      return item.transaction_type === "debit";
-  }).reduce((acc, item) => {
-       return acc + parseFloat(item.transaction_amount);
- }, 0);
-    
+
+/**
+ * Находит месяц с наибольшим количеством транзакций
+ * @returns {string} месяц с наибольшим количеством дебитовых транзакций
+ */
 findMostDebitTransactionMonth() 
    let DebitMonth = null;
    let maxDebitTr = 0;
@@ -112,7 +168,11 @@ findMostDebitTransactionMonth()
     }, {}));
 
     return DebitMonth;
-
+    
+/**
+ * Определяет тип транзакций, которых больше: кредитных или дебитовых
+ * @returns {string} тип транзакций, которых больше: "credit", "debit" или "equal"
+ */
 mostTransactionTypes()
     const debitAmount = this.transactions.filter((item) => {
         return item.transaction_type === "debit";
@@ -130,18 +190,31 @@ mostTransactionTypes()
     else {
         return "equal";
     }
+
+/**
+ * Возвращает ранзакции до указанной даты
+ * @param {string} дата
+ * @returns {Array} массив транзакций до указаной даты
+ */
 getTransactionsBeforeDate(date) 
     return this.transactions.filter((item) => {
          return item.transaction_date < date;
     });
     
-    
+/**
+ * Находит транзакции по идентификатору
+ * @param {string} идентификатор транзакций 
+ * @returns {Objectnull} найдення транзакция или null, если не найдено
+ */
 findTransactionById(id) 
     return this.transactions.find((item) => {
         return item.transaction_id === id;
     });
     
-    
+/**
+ * Вовзвращает описания транзакции
+ * @returns {Array} массив описаний транзакций
+ */
 mapTransactionDescriptions() 
     return this.transactions.map((item) => {
         return item.transaction_description;
