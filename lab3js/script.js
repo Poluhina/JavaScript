@@ -36,7 +36,7 @@ function addTransaction(event) {
 
 /**
  * Удаление транзакции по идентификатору.
- * @param {number} id - Идентификатор транзакции для удаления.
+ * @param {number} id 
  */
 function deleteTransaction(id) {
     transactions = transactions.filter(transaction => transaction.id !== id); 
